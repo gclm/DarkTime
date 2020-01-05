@@ -5,6 +5,7 @@ jenkins 配置文件
 
 ### 主题地址：
 https://www.jianshu.com/p/83c48130ebb2
+https://gclm.gitee.io/jenkins/theme/material-blue.css
 
 ### jenkins的国内升级镜像源
 
