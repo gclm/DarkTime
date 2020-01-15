@@ -1,7 +1,31 @@
 ```conf
 server {
     listen       80;
-    server_name  git.inskyuav.cn;
+    server_name  git.inskylab.cn;
+  
+    location / {
+        proxy_pass         http://127.0.0.1:18001;
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Host $server_name;
+        proxy_set_header   X-Forwarded-Proto https;
+        proxy_read_timeout  1200s;
+        client_max_body_size 0;
+    }
+   
+    access_log /www/websites/git.inskylab.cn/nginx-access.log;
+    error_log  /www/websites/git.inskylab.cn/nginx-error.log error;
+
+}
+```
+
+
+
+```conf
+server {
+    listen       80;
+    server_name  git.gclmit.club;
     rewrite ^ https://$http_host$request_uri? permanent;    #强制将http重定向到https
     server_tokens off;
 }
@@ -9,12 +33,12 @@ server {
 server {
 	
     listen 443 ssl;      # ssl http2 fastopen=3 reuseport;
-    server_name git.inskyuav.cn;
+    server_name git.gclmit.club;
     
     server_tokens off;
 
     ssl_certificate          /etc/nginx/ssl/fullchain.cer;
-    ssl_certificate_key      /etc/nginx/ssl/inskyuav.cn.key;
+    ssl_certificate_key      /etc/nginx/ssl/gclmit.key;
     ssl_dhparam              /etc/nginx/ssl/dhparam.pem;
     
     ssl_session_timeout 5m;
@@ -25,9 +49,8 @@ server {
     proxy_set_header X-Forwarded-For $remote_addr;
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains";
     
-
     location / {
-        proxy_pass         http://127.0.0.1:10000;
+        proxy_pass         http://127.0.0.1:18001;
         proxy_set_header   Host $host;
         proxy_set_header   X-Real-IP $remote_addr;
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -37,9 +60,12 @@ server {
         client_max_body_size 0;
 
     }
-
-    access_log  /www/site/logs/git.inskyuav.cn/git.inskyuav.cn.log;
-    error_log  /www/site/logs/git.inskyuav.cn/git.inskyuav.cn.error.log;
+   
+   access_log /www/websites/git.gclmit.club/nginx-access.log;
+   error_log  /www/websites/git.gclmit.club/nginx-error.log error;
 
 }
+
+
 ```
+
